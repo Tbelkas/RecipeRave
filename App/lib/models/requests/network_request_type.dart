@@ -1,0 +1,1 @@
+enum NetworkRequestType { GET, POST, PUT, PATCH, DELETE }
