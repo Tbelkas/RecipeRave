@@ -2,7 +2,8 @@
 
 namespace Recipe.Common.Models;
 
-public class AppUser : IdentityUser
+// todo http context user
+public class AppUserEntity : IdentityUser
 {
     public string? Name { get; set; }
 }

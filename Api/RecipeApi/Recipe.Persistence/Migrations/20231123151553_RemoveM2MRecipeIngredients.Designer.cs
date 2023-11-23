@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Recipe.Persistence;
 
@@ -11,9 +12,10 @@ using Recipe.Persistence;
 namespace Recipe.Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231123151553_RemoveM2MRecipeIngredients")]
+    partial class RemoveM2MRecipeIngredients
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -47,7 +49,7 @@ namespace Recipe.Persistence.Migrations
                         .HasDatabaseName("RoleNameIndex")
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
-                    b.ToTable("Auth_Roles", (string)null);
+                    b.ToTable("Roles", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -72,7 +74,7 @@ namespace Recipe.Persistence.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("Auth_RoleClaims", (string)null);
+                    b.ToTable("RoleClaims", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -97,7 +99,7 @@ namespace Recipe.Persistence.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Auth_UserClaims", (string)null);
+                    b.ToTable("UserClaims", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
@@ -119,7 +121,7 @@ namespace Recipe.Persistence.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Auth_UserLogins", (string)null);
+                    b.ToTable("UserLogins", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
@@ -134,7 +136,7 @@ namespace Recipe.Persistence.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("Auth_UserRoles", (string)null);
+                    b.ToTable("UserRoles", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -153,10 +155,10 @@ namespace Recipe.Persistence.Migrations
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
-                    b.ToTable("Auth_UserTokens", (string)null);
+                    b.ToTable("UserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Recipe.Common.Models.AppUserEntity", b =>
+            modelBuilder.Entity("Recipe.Common.Models.AppUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -201,9 +203,6 @@ namespace Recipe.Persistence.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("RecipeEntityId")
-                        .HasColumnType("int");
-
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
@@ -224,9 +223,7 @@ namespace Recipe.Persistence.Migrations
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
-                    b.HasIndex("RecipeEntityId");
-
-                    b.ToTable("Auth_AppUsers", (string)null);
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("Recipe.Persistence.Entities.IngredientEntity", b =>
@@ -284,22 +281,6 @@ namespace Recipe.Persistence.Migrations
                     b.ToTable("Recipes");
                 });
 
-            modelBuilder.Entity("Recipe.Persistence.Entities.RecipeLikeEntity", b =>
-                {
-                    b.Property<int>("RecipeId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("RecipeId", "UserId");
-
-                    b.ToTable("RecipeLikes");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -311,7 +292,7 @@ namespace Recipe.Persistence.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("Recipe.Common.Models.AppUserEntity", null)
+                    b.HasOne("Recipe.Common.Models.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -320,7 +301,7 @@ namespace Recipe.Persistence.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("Recipe.Common.Models.AppUserEntity", null)
+                    b.HasOne("Recipe.Common.Models.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -335,7 +316,7 @@ namespace Recipe.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Recipe.Common.Models.AppUserEntity", null)
+                    b.HasOne("Recipe.Common.Models.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -344,24 +325,17 @@ namespace Recipe.Persistence.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("Recipe.Common.Models.AppUserEntity", null)
+                    b.HasOne("Recipe.Common.Models.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Recipe.Common.Models.AppUserEntity", b =>
-                {
-                    b.HasOne("Recipe.Persistence.Entities.RecipeEntity", null)
-                        .WithMany("LikedUsers")
-                        .HasForeignKey("RecipeEntityId");
-                });
-
             modelBuilder.Entity("Recipe.Persistence.Entities.IngredientEntity", b =>
                 {
                     b.HasOne("Recipe.Persistence.Entities.RecipeEntity", "Recipe")
-                        .WithMany("Ingredients")
+                        .WithMany("RecipeIngredients")
                         .HasForeignKey("RecipeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -371,9 +345,7 @@ namespace Recipe.Persistence.Migrations
 
             modelBuilder.Entity("Recipe.Persistence.Entities.RecipeEntity", b =>
                 {
-                    b.Navigation("Ingredients");
-
-                    b.Navigation("LikedUsers");
+                    b.Navigation("RecipeIngredients");
                 });
 #pragma warning restore 612, 618
         }

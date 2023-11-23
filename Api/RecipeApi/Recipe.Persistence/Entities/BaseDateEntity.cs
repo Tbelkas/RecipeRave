@@ -1,6 +1,10 @@
-﻿namespace Recipe.Persistence.Entities;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Recipe.Persistence.Entities;
 
 public abstract class BaseDateEntity
 {
-    public DateTime DateCreated { get; set; }
+    [Required]
+    public DateTime CreatedDate { get; set; }
+    //createdBy?
 }

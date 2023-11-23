@@ -30,4 +30,8 @@
       <ProjectReference Include="..\Recipe.Common\Recipe.Common.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Automapper\" />
+    </ItemGroup>
+
 </Project>

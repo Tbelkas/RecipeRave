@@ -3,41 +3,40 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
-using Recipe.Api.Models;
 using Recipe.Api.Models.Requests;
 using Recipe.Api.Models.Responses;
 using Recipe.Api.Models.Responses.Base;
 using Recipe.Api.Services.Interfaces;
-using Recipe.Common;
 using Recipe.Common.Models;
+using Recipe.Common.Models.Responses.Base;
 
 namespace Recipe.Api.Services;
 
-public class AuthenticationService(UserManager<AppUser> userManager, IConfiguration configuration)
+public class AuthenticationService(UserManager<AppUserEntity> userManager, IConfiguration configuration)
     : IAuthenticationService
 {
-    public async Task<IResponse> Register(RegisterUserModel model)
+    public async Task<IResponse> Register(RegisterUserRequest request)
     {
-        var userByEmail = await userManager.FindByEmailAsync(model.Email);
-        var userByUsername = await userManager.FindByNameAsync(model.Username);
+        var userByEmail = await userManager.FindByEmailAsync(request.Email);
+        var userByUsername = await userManager.FindByNameAsync(request.Username);
         if (userByEmail is not null || userByUsername is not null)
         {
-            return new Response($"User with email {model.Email} or username {model.Username} already exists.");
+            return new Response($"User with email {request.Email} or username {request.Username} already exists.");
         }
 
-        var user = new AppUser
+        var user = new AppUserEntity
         {
-            Email = model.Email,
-            UserName = model.Username,
+            Email = request.Email,
+            UserName = request.Username,
             SecurityStamp = Guid.NewGuid().ToString()
         };
 
-        var result = await userManager.CreateAsync(user, model.Password);
+        var result = await userManager.CreateAsync(user, request.Password);
 
         return !result.Succeeded ? new Response(GetErrorsText(result.Errors)) : new Response();
     }
 
-    public async Task<IResponse> Login(LoginUserModel request)
+    public async Task<IResponse> Login(LoginUserRequest request)
     {
         var user = await userManager.FindByNameAsync(request.Username);
         if (user is null || !await userManager.CheckPasswordAsync(user, request.Password))

@@ -7,11 +7,11 @@ using Recipe.Persistence.Entities;
 
 namespace Recipe.Persistence;
 
-public class AppDbContext  : IdentityDbContext<AppUser>
+public class AppDbContext  : IdentityDbContext<AppUserEntity>
 {
-    private DbSet<IngredientEntity> Ingredients { get; set; }
-    private DbSet<RecipeEntity> Recipes { get; set; }
-    private DbSet<RecipeIngredientEntity> RecipeIngredients { get; set; }
+    public DbSet<IngredientEntity> Ingredients { get; set; }
+    public DbSet<RecipeEntity> Recipes { get; set; }
+    public DbSet<RecipeLikeEntity> RecipeLikes { get; set; }
     public AppDbContext()
     {
             
@@ -26,18 +26,27 @@ public class AppDbContext  : IdentityDbContext<AppUser>
     {
         base.OnModelCreating(modelBuilder);
         modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
-
-        modelBuilder.Entity<AppUser>(entity => entity.ToTable("Users"));
-        modelBuilder.Entity<IdentityRole>(entity => entity.ToTable("Roles"));
-        modelBuilder.Entity<IdentityUserRole<string>>(entity => entity.ToTable("UserRoles"));
-        modelBuilder.Entity<IdentityUserClaim<string>>(entity => entity.ToTable("UserClaims"));
-        modelBuilder.Entity<IdentityUserLogin<string>>(entity => entity.ToTable("UserLogins"));
-        modelBuilder.Entity<IdentityRoleClaim<string>>(entity => entity.ToTable("RoleClaims"));
-        modelBuilder.Entity<IdentityUserToken<string>>(entity => entity.ToTable("UserTokens"));
-
-        modelBuilder.Entity<RecipeIngredientEntity>(entity =>
+       
+        modelBuilder.Entity<RecipeLikeEntity>(entity => entity.HasKey(x => new { x.RecipeId, x.UserId }));
+        modelBuilder.Entity<AppUserEntity>(entity => entity.ToTable("Auth_AppUsers"));
+        modelBuilder.Entity<IdentityRole>(entity => entity.ToTable("Auth_Roles"));
+        modelBuilder.Entity<IdentityUserRole<string>>(entity => entity.ToTable("Auth_UserRoles"));
+        modelBuilder.Entity<IdentityUserClaim<string>>(entity => entity.ToTable("Auth_UserClaims"));
+        modelBuilder.Entity<IdentityUserLogin<string>>(entity => entity.ToTable("Auth_UserLogins"));
+        modelBuilder.Entity<IdentityRoleClaim<string>>(entity => entity.ToTable("Auth_RoleClaims"));
+        modelBuilder.Entity<IdentityUserToken<string>>(entity => entity.ToTable("Auth_UserTokens"));
+    }
+    
+    public override int SaveChanges()
+    {
+        var entities = ChangeTracker.Entries().Where(x => x is { Entity: BaseDateEntity, State: EntityState.Added or EntityState.Modified });
+        foreach (var entity in entities)
         {
-            entity.HasKey(x => new { x.RecipeId, x.IngredientId });
-        });
+            if (entity.State == EntityState.Added)
+            {
+                ((BaseEntity)entity.Entity).CreatedDate = DateTime.Now;
+            }
+        }
+        return base.SaveChanges();
     }
 }

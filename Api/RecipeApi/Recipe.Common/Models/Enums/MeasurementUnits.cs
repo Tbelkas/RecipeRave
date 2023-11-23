@@ -1,4 +1,4 @@
-﻿namespace Recipe.Persistence.Entities.Enums;
+﻿namespace Recipe.Common.Models.Enums;
 
 public enum MeasurementUnit
 {

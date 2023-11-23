@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Recipe.Persistence.Repositories;
+using Recipe.Persistence.Repositories.Interfaces;
 
 namespace Recipe.Persistence;
 
@@ -19,6 +21,6 @@ public static class PersistenceStartup
 
     private static void RegisterRepositories(IServiceCollection services)
     {
-
+        services.AddTransient<IRecipeRepository, RecipeRepository>();
     }
 }

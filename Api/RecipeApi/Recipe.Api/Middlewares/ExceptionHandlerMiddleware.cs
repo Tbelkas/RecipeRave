@@ -31,7 +31,7 @@ public class ExceptionHandlerMiddleware
                 exceptionMessage, DateTime.UtcNow);
 
             context.Response.Headers.Add("Content-Type", "application/json");
-            var result = JsonSerializer.Serialize(new Response("Something wrong happened"));
+            var result = JsonSerializer.Serialize(new ApiResponse("Something wrong happened"));
             response.StatusCode = (int)HttpStatusCode.InternalServerError;
             await response.WriteAsync(result);
         }

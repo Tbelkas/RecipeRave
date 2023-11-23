@@ -2,8 +2,7 @@
 
 namespace Recipe.Api.Models.Responses.Base;
 
-public interface IResponse
+public interface IApiResponse
 {
     List<string> ErrorMessages { get; set; }
-    HttpStatusCode StatusCode { get; set; }
 }

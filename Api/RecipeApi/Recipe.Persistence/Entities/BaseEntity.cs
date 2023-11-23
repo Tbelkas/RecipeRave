@@ -6,6 +6,6 @@ namespace Recipe.Persistence.Entities;
 public abstract class BaseEntity : BaseDateEntity 
 {
     [Key]
-    [DatabaseGenerated(System.ComponentModel.DataAnnotations.Schema.DatabaseGeneratedOption.Identity)]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
 }

@@ -1,4 +1,6 @@
-﻿namespace Recipe.Api.Models.Responses.Base;
+﻿using Recipe.Common.Models.Enums;
+
+namespace Recipe.Common.Models.Responses.Base;
 
 public class DataResponse<T> : Response
 {
@@ -7,5 +9,6 @@ public class DataResponse<T> : Response
     public DataResponse(T data)
     {
         Data = data;
+        StatusCode = StatusCode.Ok;
     }
 }

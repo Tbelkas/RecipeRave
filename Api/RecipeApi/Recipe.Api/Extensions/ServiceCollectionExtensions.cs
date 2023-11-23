@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.OpenApi.Models;
 using Recipe.Api.Services;
@@ -18,7 +19,7 @@ public static class ServiceCollectionExtensions
         serviceCollection.AddAutoMapper(typeof(PersistenceStartup));
         serviceCollection.AddAutoMapper(typeof(Program));
         
-        serviceCollection.AddIdentity<AppUser, IdentityRole>(options =>
+        serviceCollection.AddIdentity<AppUserEntity, IdentityRole>(options =>
             {
                 options.Password.RequireNonAlphanumeric = false;
                 options.SignIn.RequireConfirmedAccount = false;
@@ -82,7 +83,14 @@ public static class ServiceCollectionExtensions
                 }
             });
         });
-        
+
+        serviceCollection.RegisterServices();
+    }
+
+    private static void RegisterServices(this IServiceCollection serviceCollection)
+    {
         serviceCollection.AddTransient<IAuthenticationService, AuthenticationService>();
+        serviceCollection.AddTransient<IRecipeService, RecipeService>();
+        serviceCollection.AddTransient<IMapper, Mapper>();
     }
 }
