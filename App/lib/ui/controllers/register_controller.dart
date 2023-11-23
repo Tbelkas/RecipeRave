@@ -1,46 +1,48 @@
 import 'dart:developer';
 
+import 'package:app/services/auth_service.dart';
 import 'package:app/ui/models/register_model.dart';
+import 'package:app/ui/screens/login_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 class RegisterController extends GetxController{
   final registerModel = RegisterModel().obs;
-
+  late final AuthService authService;
   final userName = ''.obs;
+  final email = ''.obs;
   final password = ''.obs;
   final confirmPassword = ''.obs;
-
-  setUserName(userName){
-    this.userName.value = userName;
-  }
-
-  setPassword(password){
-    this.password.value = password;
-  }
-
-  setConfirmPassword(confirmPassword){
-    this.confirmPassword.value = confirmPassword;
-  }
-
+  // todo: errorWidgetService
+  final errors = <String>[""].obs;
 
   final userNameController = TextEditingController();
+  final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
 
-
-  get getUsername => registerModel.value.username;
-  setUsername(username) {
-    registerModel.value.username = username;
-  }
-
   @override
-  void onInit() {
+  onInit(){
     super.onInit();
+
+    // todo: DI
+    authService = AuthService();
   }
 
-  onRegister(){
-    log('data: ${userNameController.value.text}, $password, $passwordController');
+  onRegister() async {
+    registerModel.value.username = userNameController.value.text;
+    registerModel.value.password = passwordController.value.text;
+    registerModel.value.confirmPassword = confirmPasswordController.value.text;
+    registerModel.value.email = confirmPasswordController.value.text;
+    log('data: ${registerModel.value.username} ${registerModel.value.password} ${registerModel.value.confirmPassword} ${registerModel.value.email}');
+
+    var result = await authService.register(registerModel.value);
+    if (!result.isSuccess){
+      errors.value = result.errorMessages!;
+      return;
+    }
+
+    Get.back(result: registerModel.value.username);
   }
 
   validateData(){

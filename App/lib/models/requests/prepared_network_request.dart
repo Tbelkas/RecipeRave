@@ -1,33 +1,28 @@
+import 'dart:convert';
+
 import 'package:app/models/requests/network_request.dart';
-import 'package:app/models/requests/network_response.dart';
+import 'package:app/models/responses/base/api_data_response.dart';
+import 'package:app/models/responses/base/api_response.dart';
 import 'package:dio/dio.dart';
 
 
-class PreparedNetworkRequest<Model> {
-  const PreparedNetworkRequest(
-      this.request,
-      this.parser,
+class PreparedNetworkRequest<TReq> {
+  const PreparedNetworkRequest(this.request,
       this.dio,
       this.headers,
       this.onSendProgress,
-      this.onReceiveProgress,
-      );
+      this.onReceiveProgress,);
 
   final NetworkRequest request;
-  final Model Function(Map<String, dynamic>) parser;
   final Dio dio;
   final Map<String, dynamic> headers;
   final ProgressCallback? onSendProgress;
   final ProgressCallback? onReceiveProgress;
 
 
-  Future<NetworkResponse<Model>> executeRequest(
-      ) async {
+  Future<ApiResponse> executeRequest() async {
     try {
-      dynamic body = request.data.whenOrNull(
-        json: (data) => data,
-        text: (data) => data,
-      );
+      dynamic body = request.data;
       final response = await dio.request(
         request.path,
         data: body,
@@ -40,29 +35,40 @@ class PreparedNetworkRequest<Model> {
         onReceiveProgress: onReceiveProgress,
       );
 
-      return NetworkResponse.ok(parser(response.data));
+      return ApiResponse();
     } on DioException catch (error) {
-      final errorText = error.toString();
-      if (error.requestOptions.cancelToken!.isCancelled) {
-        return NetworkResponse.noData(errorText);
-      }
-      switch (error.response?.statusCode) {
-        case 400:
-          return NetworkResponse.badRequest(errorText);
-        case 401:
-          return NetworkResponse.noAuth(errorText);
-        case 403:
-          return NetworkResponse.noAccess(errorText);
-        case 404:
-          return NetworkResponse.notFound(errorText);
-        case 409:
-          return NetworkResponse.conflict(errorText);
-        default:
-          return NetworkResponse.noData(errorText);
-      }
+      var errorResponse = ApiResponse.fromJson(error.response!.data);
+
+      return errorResponse;
     } catch (error) {
-      return NetworkResponse.noData(error.toString());
+      return ApiResponse(errorMessages: ["Something wrong happened"]);
     }
   }
 
+  // todo : singleMethod
+  Future<ApiDataResponse> executeDataRequest() async {
+    try {
+      var body = request.data;
+      final response = await dio.request(
+        request.path,
+        data: body,
+        queryParameters: request.queryParams,
+        options: Options(
+          method: request.type.name,
+          headers: headers,
+        ),
+        onSendProgress: onSendProgress,
+        onReceiveProgress: onReceiveProgress,
+      );
+
+      return ApiDataResponse.fromJson(response.data);
+    } on DioException catch (error) {
+      var errorResponse = ApiDataResponse.fromJson(error.response!.data);
+
+      return errorResponse;
+    } catch (error) {
+      // todo: hide error
+      return ApiDataResponse(errorMessages: [error.toString()]);
+    }
+  }
 }

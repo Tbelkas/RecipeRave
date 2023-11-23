@@ -1,3 +1,8 @@
+import 'package:app/models/requests/network_request.dart';
+import 'package:app/models/requests/network_response.dart';
+import 'package:app/models/requests/prepared_network_request.dart';
+import 'package:app/models/responses/base/api_data_response.dart';
+import 'package:app/models/responses/base/api_response.dart';
 import 'package:dio/dio.dart';
 
 class NetworkService {
@@ -11,4 +16,19 @@ class NetworkService {
     return dio;
   }
 
+  Future<ApiDataResponse> execute<TReq>(NetworkRequest request, {
+        ProgressCallback? onSendProgress,
+        ProgressCallback? onReceiveProgress}) async {
+    var dio = await getDefaultDioClient();
+    final req = PreparedNetworkRequest<TReq>(
+      request,
+      dio,
+      ({..._headers, ...(request.headers ?? {})}),
+      onSendProgress,
+      onReceiveProgress,
+    );
+
+    final result = await req.executeDataRequest();
+    return result;
+  }
 }

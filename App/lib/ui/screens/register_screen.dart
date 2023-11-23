@@ -1,4 +1,5 @@
 import 'package:app/ui/common_widgets/common_text_button.dart';
+import 'package:app/ui/common_widgets/error_message/error_message_widget.dart';
 import 'package:app/ui/controllers/login_controller.dart';
 import 'package:app/ui/controllers/register_controller.dart';
 import 'package:flutter/material.dart';
@@ -18,11 +19,28 @@ class RegisterScreen extends GetView<RegisterController> {
         children: [
           Image.asset("assets/logo.png"),
           Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Obx(() => ErrorMessageWidget(
+              errors: controller.errors.value,
+            ),
+            )
+          ),
+          Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
             child: TextField(
               controller: controller.userNameController,
               decoration: const InputDecoration(
                   border: OutlineInputBorder(), hintText: "Username"),
+            ),
+          ),
+
+
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+            child: TextField(
+              controller: controller.emailController,
+              decoration: const InputDecoration(
+                  border: OutlineInputBorder(), hintText: "Email"),
             ),
           ),
           Padding(
@@ -37,7 +55,7 @@ class RegisterScreen extends GetView<RegisterController> {
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
             child: TextField(
               controller: controller.confirmPasswordController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                   border: OutlineInputBorder(), hintText: "Confirm password"),
             ),
           ),

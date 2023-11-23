@@ -4,12 +4,13 @@ import 'package:app/ui/screens/register_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'ui/screens/login_screen.dart';
 
 void main() async {
-  // await GetStorage.init();
+  await GetStorage.init();
   Get.put(LoginController());
   Get.put(RegisterController());
   runApp(MyApp());
@@ -19,7 +20,7 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -1,32 +1,26 @@
 import 'package:app/models/requests/network_request.dart';
-import 'package:app/models/requests/network_response.dart';
-import 'package:app/models/requests/prepared_network_request.dart';
+import 'package:app/models/requests/network_request_type.dart';
+import 'package:app/models/responses/base/api_data_response.dart';
+import 'package:app/models/responses/base/api_response.dart';
+import 'package:app/models/responses/login_response.dart';
 import 'package:app/services/network_service.dart';
-import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
+import 'package:app/ui/models/login_model.dart';
+import 'package:app/ui/models/register_model.dart';
 
 class AuthService {
   final NetworkService _network_service;
 
-  AuthService() : _network_service = NetworkService(baseUrl: "https://localhost:30000");
+  AuthService() : _network_service = NetworkService(baseUrl: "http://10.0.2.2:5218/Auth");
 
-  register() {
-    Future<NetworkResponse<Model>> execute<Model>(NetworkRequest request,
-        Model Function(Map<String, dynamic>) parser, {
-          ProgressCallback? onSendProgress,
-          ProgressCallback? onReceiveProgress}) async {
-      var dio = await _network_service.getDefaultDioClient();
-      final req = PreparedNetworkRequest<Model>(
-        request,
-        parser,
-        dio,
-        ({...request.headers!}),
-        onSendProgress,
-        onReceiveProgress,
-      );
-      final result = await req.executeRequest();
+  Future<ApiResponse> register(RegisterModel registerModel) async{
+    var networkRequest = NetworkRequest(type: NetworkRequestType.POST, path: "/Register", data: registerModel);
+    var result = await _network_service.execute<RegisterModel>(networkRequest);
+    return result;
+  }
 
-      return result;
-    }
+  Future<ApiDataResponse> login(LoginModel loginModel) async{
+    var networkRequest = NetworkRequest(type: NetworkRequestType.POST, path: "/Login", data: loginModel);
+    var result = await _network_service.execute<LoginModel>(networkRequest);
+    return result;
   }
 }

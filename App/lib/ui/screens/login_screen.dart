@@ -1,11 +1,11 @@
 import 'package:app/ui/common_widgets/common_text_button.dart';
+import 'package:app/ui/common_widgets/error_message/error_message_widget.dart';
 import 'package:app/ui/controllers/login_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class LoginScreen extends GetView<LoginController> {
   static const routePath = '/loginscreen';
-  final LoginController _orderController = Get.put(LoginController());
 
   LoginScreen({Key? key}) : super(key: key);
 
@@ -19,18 +19,26 @@ class LoginScreen extends GetView<LoginController> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Image.asset("assets/logo.png"),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-            child: TextField(
-              decoration: InputDecoration(
-              border: OutlineInputBorder(), hintText: "Username"),
-            ),
+          Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: Obx(() => ErrorMessageWidget(
+                errors: controller.errors.value,
+              ),
+              )
           ),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+            child: Obx(() => TextField(
+                  controller: controller.userNameController,
+                  decoration: InputDecoration(border: const OutlineInputBorder(), hintText: "Username", labelText: controller.userName.value.isEmpty ? null : controller.userName.value),
+                )),
+          ),
+          //todo: password decoration
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
             child: TextField(
-              decoration: InputDecoration(
-                  border: OutlineInputBorder(), hintText: "Password"),
+              controller: controller.passwordController,
+              decoration: const InputDecoration(border: OutlineInputBorder(), hintText: "Password"),
             ),
           ),
           Padding(

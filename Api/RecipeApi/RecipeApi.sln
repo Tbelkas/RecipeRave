@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Recipe.Api", "Recipe.Api\Recipe.Api.csproj", "{B365AEEC-2A57-4660-8455-77E5DDCA8145}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Recipe.Persistence", "Recipe.Persistence\Recipe.Persistence.csproj", "{F910A036-8AF0-4B22-90E4-33FFC851361A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Recipe.Common", "Recipe.Common\Recipe.Common.csproj", "{FB36969A-7AB6-43D0-924F-CDAB9AA2C15C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B365AEEC-2A57-4660-8455-77E5DDCA8145}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B365AEEC-2A57-4660-8455-77E5DDCA8145}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B365AEEC-2A57-4660-8455-77E5DDCA8145}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B365AEEC-2A57-4660-8455-77E5DDCA8145}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F910A036-8AF0-4B22-90E4-33FFC851361A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F910A036-8AF0-4B22-90E4-33FFC851361A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F910A036-8AF0-4B22-90E4-33FFC851361A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F910A036-8AF0-4B22-90E4-33FFC851361A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FB36969A-7AB6-43D0-924F-CDAB9AA2C15C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB36969A-7AB6-43D0-924F-CDAB9AA2C15C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB36969A-7AB6-43D0-924F-CDAB9AA2C15C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB36969A-7AB6-43D0-924F-CDAB9AA2C15C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
