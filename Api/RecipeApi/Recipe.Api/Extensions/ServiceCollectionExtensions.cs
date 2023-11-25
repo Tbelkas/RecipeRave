@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using System.Text.Json;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.OpenApi.Models;
@@ -6,9 +7,11 @@ using Recipe.Api.Services;
 using Recipe.Common;
 using Recipe.Persistence;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http.Json;
 using Microsoft.IdentityModel.Tokens;
 using Recipe.Api.Services.Interfaces;
 using Recipe.Common.Models;
+using Recipe.Persistence.Entities;
 
 namespace Recipe.Api.Extensions;
 
@@ -16,8 +19,7 @@ public static class ServiceCollectionExtensions
 {
     public static void SetupServices(this IServiceCollection serviceCollection, IConfiguration configuration)
     {
-        serviceCollection.AddAutoMapper(typeof(PersistenceStartup));
-        serviceCollection.AddAutoMapper(typeof(Program));
+        serviceCollection.AddAutoMapper(cfg => cfg.AllowNullCollections = true, typeof(Program));
         
         serviceCollection.AddIdentity<AppUserEntity, IdentityRole>(options =>
             {
@@ -47,7 +49,10 @@ public static class ServiceCollectionExtensions
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"]))
                 };
             });
-        
+        serviceCollection.Configure<JsonOptions>(options =>
+        {
+            options.SerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+        });
         serviceCollection.AddLogging();
         serviceCollection.AddEndpointsApiExplorer();
         serviceCollection.AddControllers();
@@ -90,7 +95,6 @@ public static class ServiceCollectionExtensions
     private static void RegisterServices(this IServiceCollection serviceCollection)
     {
         serviceCollection.AddTransient<IAuthenticationService, AuthenticationService>();
-        serviceCollection.AddTransient<IRecipeService, RecipeService>();
         serviceCollection.AddTransient<IMapper, Mapper>();
     }
 }

@@ -1,12 +1,13 @@
 ﻿using AutoMapper;
 using Recipe.Api.Models.Requests;
 using Recipe.Common.Models;
+using Recipe.Persistence.Entities;
 
 namespace Recipe.Api.Automapper;
 
-public class RecipeProfile : Profile
+public class RecipeLikeProfile : Profile
 {
-    public RecipeProfile()
+    public RecipeLikeProfile()
     {
         CreateMap<CreateRecipeRequest, RecipeModel>();
     }

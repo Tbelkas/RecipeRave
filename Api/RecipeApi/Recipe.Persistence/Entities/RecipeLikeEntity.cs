@@ -1,9 +1,11 @@
-﻿using Recipe.Common.Models;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
 namespace Recipe.Persistence.Entities;
 
+[Table("RecipesLikes")]
 public class RecipeLikeEntity : BaseDateEntity
 {
-    public int UserId;
+    public string AppUserId;
     public AppUserEntity AppUser;
     public int RecipeId;
     public RecipeEntity Recipe;

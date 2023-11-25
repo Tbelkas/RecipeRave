@@ -27,7 +27,7 @@ public class AppDbContext  : IdentityDbContext<AppUserEntity>
         base.OnModelCreating(modelBuilder);
         modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
        
-        modelBuilder.Entity<RecipeLikeEntity>(entity => entity.HasKey(x => new { x.RecipeId, x.UserId }));
+        modelBuilder.Entity<RecipeLikeEntity>(entity => entity.HasKey(x => new { x.RecipeId, x.AppUserId }));
         modelBuilder.Entity<AppUserEntity>(entity => entity.ToTable("Auth_AppUsers"));
         modelBuilder.Entity<IdentityRole>(entity => entity.ToTable("Auth_Roles"));
         modelBuilder.Entity<IdentityUserRole<string>>(entity => entity.ToTable("Auth_UserRoles"));
@@ -35,6 +35,14 @@ public class AppDbContext  : IdentityDbContext<AppUserEntity>
         modelBuilder.Entity<IdentityUserLogin<string>>(entity => entity.ToTable("Auth_UserLogins"));
         modelBuilder.Entity<IdentityRoleClaim<string>>(entity => entity.ToTable("Auth_RoleClaims"));
         modelBuilder.Entity<IdentityUserToken<string>>(entity => entity.ToTable("Auth_UserTokens"));
+        
+        modelBuilder.Entity<RecipeEntity>()
+            .HasMany(e => e.LikedUsers)
+            .WithMany(e => e.LikedRecipes)
+            .UsingEntity<RecipeLikeEntity>(
+                r => r.HasOne<AppUserEntity>().WithMany().HasForeignKey(e => e.AppUserId),
+                l => l.HasOne<RecipeEntity>().WithMany().HasForeignKey(e => e.RecipeId)
+            );
     }
     
     public override int SaveChanges()

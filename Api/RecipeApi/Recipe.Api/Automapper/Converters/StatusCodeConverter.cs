@@ -12,7 +12,6 @@ public class StatusCodeConverter : IValueConverter<StatusCode, HttpStatusCode>
         return source switch
         {
             StatusCode.Ok => HttpStatusCode.OK,
-            StatusCode.EmptyOk => HttpStatusCode.NoContent,
             StatusCode.ArgumentError => HttpStatusCode.BadRequest,
             StatusCode.NotFound => HttpStatusCode.NotFound,
             _ => HttpStatusCode.InternalServerError

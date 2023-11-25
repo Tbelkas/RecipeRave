@@ -1,8 +1,9 @@
 ﻿using System.Net;
 using AutoMapper;
 using Recipe.Api.Automapper.Converters;
-using Recipe.Api.Models.AutoMapper;
+using Recipe.Api.Automapper.Models;
 using Recipe.Api.Models.Responses.Base;
+using Recipe.Common.Models.Enums;
 using Recipe.Common.Models.Responses.Base;
 
 namespace Recipe.Api.Automapper;
@@ -11,11 +12,21 @@ public class ResponseProfile : Profile
 {
     public ResponseProfile()
     {
-        CreateMap<Response, ApiResponse>();
-        CreateMap(typeof(DataResponse<>), typeof(ApiDataResponse<>));
+        CreateMap(typeof(Response), typeof(ApiResponse<>));
+        CreateMap(typeof(Response), typeof(ApiResponse));
+        CreateMap(typeof(Response), typeof(ApiResponseTuple<>))
+            .ForMember("Response", opt => opt.MapFrom(s => s))
+            .ForMember("StatusCode", opt => opt.ConvertUsing<StatusCode, HttpStatusCode>(new StatusCodeConverter(), "StatusCode"));
         CreateMap<Response, ApiResponseTuple>()
             .ForMember(dest => dest.Response, opt => opt.MapFrom(s => s))
             .ForMember(dest => dest.StatusCode, opt => opt.ConvertUsing(new StatusCodeConverter(), x => x.StatusCode));
-        CreateMap(typeof(DataResponse<>), typeof(DataApiResponseTuple<>)).ForMember("Response", opt => opt.MapFrom(src => src));
+
+        CreateMap(typeof(Response<>), typeof(ApiResponse<>))
+            .ForMember("Data", opt => opt.MapFrom("Data"));
+      
+        CreateMap(typeof(Response<>), typeof(ApiResponseTuple<>))
+            .ForMember("Response", opt => opt.MapFrom(s => s))
+            .ForMember("StatusCode", opt => opt.ConvertUsing<StatusCode, HttpStatusCode>(new StatusCodeConverter(), "StatusCode"));
+
     }
 }

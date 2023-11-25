@@ -1,24 +1,31 @@
-﻿using System.Net;
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Recipe.Api.Models.AutoMapper;
+using Recipe.Api.Automapper.Models;
 using Recipe.Api.Models.Requests;
 using Recipe.Api.Models.Responses;
 using Recipe.Api.Models.Responses.Base;
 using Recipe.Api.Services.Interfaces;
-using Recipe.Common.Models.Responses.Base;
 
 namespace Recipe.Api.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class AuthController(IAuthenticationService authenticationService, IMapper _mapper) : ControllerBase
+public class AuthController: ControllerBase
 {
+    private readonly IAuthenticationService _authenticationService;
+    private readonly IMapper _mapper;
+
+    public AuthController(IAuthenticationService authenticationService, IMapper mapper)
+    {
+        _authenticationService = authenticationService;
+        _mapper = mapper;
+    }
+    
     [HttpPost]
     [Route("Register")]
     public async Task<IActionResult> RegisterUser(RegisterUserRequest user)
     {
-        var result = await authenticationService.Register(user);
+        var result = await _authenticationService.Register(user);
         var responseTuple = _mapper.Map<ApiResponseTuple>(result);
         return StatusCode((int)responseTuple.StatusCode, responseTuple.Response);
     }
@@ -27,8 +34,8 @@ public class AuthController(IAuthenticationService authenticationService, IMappe
     [Route("Login")]
     public async Task<IActionResult> LoginUser(LoginUserRequest user)
     {
-        var result = await authenticationService.Login(user);
-        var responseTuple = _mapper.Map<DataApiResponseTuple<LoginResponse>>(result);
+        var result = await _authenticationService.Login(user);
+        var responseTuple = _mapper.Map<ApiResponseTuple<LoginResponse>>(result);
         return StatusCode((int)responseTuple.StatusCode, responseTuple.Response);
     }
 }

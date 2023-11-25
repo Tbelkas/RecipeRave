@@ -6,7 +6,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <AssemblyName>Recipe.Api</AssemblyName>
         <RootNamespace>Recipe.Api</RootNamespace>
-        <LangVersion>12</LangVersion>
+        <LangVersion>10</LangVersion>
     </PropertyGroup>
 
     <ItemGroup>
@@ -17,6 +17,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Recipe.Common\Recipe.Common.csproj" />
+      <ProjectReference Include="..\Recipe.Domain\Recipe.Domain.csproj" />
       <ProjectReference Include="..\Recipe.Persistence\Recipe.Persistence.csproj" />
     </ItemGroup>
 

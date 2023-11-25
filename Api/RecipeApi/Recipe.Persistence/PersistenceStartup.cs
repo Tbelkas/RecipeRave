@@ -8,15 +8,19 @@ namespace Recipe.Persistence;
 
 public static class PersistenceStartup
 {
-    public static void Setup(IServiceCollection services, IConfiguration configuration)
+    public static void Setup(IServiceCollection serviceCollection, IConfiguration configuration)
     {
         var connectionString = configuration.GetConnectionString("DbConnectionString");
-        services.AddMemoryCache();
-        services.AddDbContext<AppDbContext>(options =>
+        
+        serviceCollection.AddAutoMapper(cfg => cfg.AllowNullCollections = true, typeof(PersistenceStartup));
+        // todo: add memory caches
+        serviceCollection.AddMemoryCache();
+        serviceCollection.AddDbContext<AppDbContext>(options =>
         {
             options.UseSqlServer(connectionString);
         });
-        RegisterRepositories(services);
+        
+        RegisterRepositories(serviceCollection);
     }
 
     private static void RegisterRepositories(IServiceCollection services)

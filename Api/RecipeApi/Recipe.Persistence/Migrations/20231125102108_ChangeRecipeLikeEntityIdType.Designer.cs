@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Recipe.Persistence;
 
@@ -11,9 +12,10 @@ using Recipe.Persistence;
 namespace Recipe.Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231125102108_ChangeRecipeLikeEntityIdType")]
+    partial class ChangeRecipeLikeEntityIdType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -252,7 +254,7 @@ namespace Recipe.Persistence.Migrations
 
                     b.HasIndex("RecipeId");
 
-                    b.ToTable("Ingredients", (string)null);
+                    b.ToTable("Ingredients");
                 });
 
             modelBuilder.Entity("Recipe.Persistence.Entities.RecipeEntity", b =>
@@ -276,7 +278,7 @@ namespace Recipe.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Recipes", (string)null);
+                    b.ToTable("Recipes");
                 });
 
             modelBuilder.Entity("Recipe.Persistence.Entities.RecipeLikeEntity", b =>
@@ -294,7 +296,7 @@ namespace Recipe.Persistence.Migrations
 
                     b.HasIndex("AppUserId");
 
-                    b.ToTable("RecipesLikes", (string)null);
+                    b.ToTable("RecipesLikes");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

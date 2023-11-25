@@ -3,7 +3,6 @@
 public enum StatusCode
 {
     Ok,
-    EmptyOk,
     ArgumentError,
     NotFound,
 }

@@ -1,22 +1,32 @@
-﻿using System.Net;
+﻿using System.Text.Json.Serialization;
 
 namespace Recipe.Api.Models.Responses.Base;
 
+public class ApiResponse<T> : ApiResponse
+{
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public T? Data { get; set; }
+
+    public ApiResponse(T? data)
+    {
+        Data = data;
+    }
+}
 public class ApiResponse : IApiResponse
 {
-    public List<string> ErrorMessages { get; set; } = [];
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public List<string>? ErrorMessages { get; set; }
     public ApiResponse()
     {
     }
     
     public ApiResponse(string error)
     {
-        ErrorMessages = [error];
+        ErrorMessages = new List<string>{error};
     }
         
     public ApiResponse(IEnumerable<string> errors)
     {
         ErrorMessages = errors.ToList();
     }
-    
 }

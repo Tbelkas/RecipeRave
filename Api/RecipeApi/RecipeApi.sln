@@ -8,6 +8,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Recipe.Common", "Recipe.Com
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Recipe.Tests", "Recipe.Tests\Recipe.Tests.csproj", "{F29A9DA0-B0F6-46A8-B63D-C0175B3154A5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Recipe.Domain", "Recipe.Domain\Recipe.Domain.csproj", "{CD5BCEB2-2B17-4DDF-8687-A2AF05726784}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{F29A9DA0-B0F6-46A8-B63D-C0175B3154A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F29A9DA0-B0F6-46A8-B63D-C0175B3154A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F29A9DA0-B0F6-46A8-B63D-C0175B3154A5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CD5BCEB2-2B17-4DDF-8687-A2AF05726784}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD5BCEB2-2B17-4DDF-8687-A2AF05726784}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD5BCEB2-2B17-4DDF-8687-A2AF05726784}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD5BCEB2-2B17-4DDF-8687-A2AF05726784}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
