@@ -7,6 +7,10 @@ public class ApiResponse<T> : ApiResponse
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public T? Data { get; set; }
 
+    public ApiResponse()
+    {
+    }
+    
     public ApiResponse(T? data)
     {
         Data = data;

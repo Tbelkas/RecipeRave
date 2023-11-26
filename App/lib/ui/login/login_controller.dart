@@ -1,8 +1,10 @@
 
+import 'package:app/models/constants/storage_keys.dart';
 import 'package:app/models/responses/login_response.dart';
 import 'package:app/services/auth_service.dart';
-import 'package:app/ui/models/login_model.dart';
-import 'package:app/ui/screens/register_screen.dart';
+import 'package:app/ui/login/models/login_model.dart';
+import 'package:app/ui/recipe_browser/recipe_browser_screen.dart';
+import 'package:app/ui/register/register_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -38,9 +40,11 @@ class LoginController extends GetxController{
 
     var resultData = LoginResponse.fromJson(result.data);
 
-    // todo: Keys separate file
     // todo: Refresh tokens?
-    GetStorage().write('token', resultData.token);
+    GetStorage().write(tokenKey, resultData.token);
+
+    // todo: Starting to get messy, global router?
+    Get.offAllNamed(RecipeBrowserScreen.routePath);
   }
 
   onRegister() async {

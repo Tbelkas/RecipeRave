@@ -1,8 +1,7 @@
 import 'dart:developer';
 
 import 'package:app/services/auth_service.dart';
-import 'package:app/ui/models/register_model.dart';
-import 'package:app/ui/screens/login_screen.dart';
+import 'package:app/ui/register/models/register_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 

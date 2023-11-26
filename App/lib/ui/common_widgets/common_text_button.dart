@@ -6,8 +6,10 @@ class CommonTextButton extends StatelessWidget {
   final void Function()? onPressed;
   final double width;
   final double height;
+  // todo width
   const CommonTextButton({required this.text, this.onPressed, this.width =
   2000, this.height = 60, super.key}) ;
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(

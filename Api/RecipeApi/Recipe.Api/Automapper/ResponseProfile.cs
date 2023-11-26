@@ -17,6 +17,7 @@ public class ResponseProfile : Profile
         CreateMap(typeof(Response), typeof(ApiResponseTuple<>))
             .ForMember("Response", opt => opt.MapFrom(s => s))
             .ForMember("StatusCode", opt => opt.ConvertUsing<StatusCode, HttpStatusCode>(new StatusCodeConverter(), "StatusCode"));
+        
         CreateMap<Response, ApiResponseTuple>()
             .ForMember(dest => dest.Response, opt => opt.MapFrom(s => s))
             .ForMember(dest => dest.StatusCode, opt => opt.ConvertUsing(new StatusCodeConverter(), x => x.StatusCode));

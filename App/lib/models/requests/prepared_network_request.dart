@@ -5,20 +5,14 @@ import 'package:app/models/responses/base/api_data_response.dart';
 import 'package:app/models/responses/base/api_response.dart';
 import 'package:dio/dio.dart';
 
-
 class PreparedNetworkRequest<TReq> {
-  const PreparedNetworkRequest(this.request,
-      this.dio,
-      this.headers,
-      this.onSendProgress,
-      this.onReceiveProgress,);
+  const PreparedNetworkRequest(this.request, this.dio, this.headers, this.onSendProgress, this.onReceiveProgress);
 
   final NetworkRequest request;
   final Dio dio;
   final Map<String, dynamic> headers;
   final ProgressCallback? onSendProgress;
   final ProgressCallback? onReceiveProgress;
-
 
   Future<ApiResponse> executeRequest() async {
     try {

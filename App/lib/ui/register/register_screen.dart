@@ -1,18 +1,21 @@
 import 'package:app/ui/common_widgets/common_text_button.dart';
+import 'package:app/ui/common_widgets/app_bar/common_app_bar.dart';
 import 'package:app/ui/common_widgets/error_message/error_message_widget.dart';
-import 'package:app/ui/controllers/login_controller.dart';
-import 'package:app/ui/controllers/register_controller.dart';
+import 'package:app/ui/register/register_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class RegisterScreen extends GetView<RegisterController> {
   static const routePath = '/register';
+  static const _screenTitle = 'Recipe rave registration';
 
   const RegisterScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        resizeToAvoidBottomInset: false,
+        appBar: const CommonAppBar(_screenTitle),
         body: SafeArea(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,

@@ -7,13 +7,11 @@ class ApiDataResponse extends ApiResponse {
   ApiDataResponse({this.data, super.errorMessages});
 
   ApiDataResponse.fromJson(Map<String, dynamic> json) {
-    ApiResponse.fromJson(json);
+    addErrors(json);
     var dataJson = json['data'];
-    if(dataJson == null){
-      return;
+    if(dataJson != null){
+      data = json['data'];
     }
-
-    data = json['data'];
   }
 
   @override
