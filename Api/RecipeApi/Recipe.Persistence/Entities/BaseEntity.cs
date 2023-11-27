@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Recipe.Persistence.Entities;
 
-public abstract class BaseEntity : BaseDateEntity 
+public abstract class BaseEntity : BaseAuditEntity 
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

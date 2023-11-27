@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Recipe.Api.Extensions;
 using Recipe.Api.Middlewares;
 using Recipe.Domain;
@@ -12,7 +13,7 @@ DomainStartup.Setup(services);
 services.SetupServices(configuration);
 
 var app = builder.Build();
-
+Task.Run(() => CreateRoles(app.Services));
 app.UseMiddleware<ExceptionHandlerMiddleware>();
 
 app.UseAuthentication();
@@ -29,5 +30,21 @@ if (app.Environment.IsDevelopment())
     });
 }
 
+async Task CreateRoles(IServiceProvider serviceCollection)
+{
+    using var scope = serviceCollection.CreateScope();
+    var roleManager = (RoleManager<IdentityRole>)scope.ServiceProvider.GetService(typeof(RoleManager<IdentityRole>));
+
+    string[] roleNames = { "Admin" };
+
+    foreach (var roleName in roleNames)
+    {
+        var roleExist = await roleManager.RoleExistsAsync(roleName);
+        if (!roleExist)
+        {
+            await roleManager.CreateAsync(new IdentityRole(roleName));
+        }
+    }
+}
 
 app.Run();

@@ -1,14 +1,15 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Recipe.Common;
-using Recipe.Common.Models;
 using Recipe.Persistence.Entities;
 
 namespace Recipe.Persistence;
 
 public class AppDbContext  : IdentityDbContext<AppUserEntity>
 {
+    private readonly IHttpContextAccessor _httpContextAccessor;
+    
     public DbSet<IngredientEntity> Ingredients { get; set; }
     public DbSet<RecipeEntity> Recipes { get; set; }
     public DbSet<RecipeLikeEntity> RecipeLikes { get; set; }
@@ -17,9 +18,10 @@ public class AppDbContext  : IdentityDbContext<AppUserEntity>
             
     }
         
-    public AppDbContext(DbContextOptions<AppDbContext> options)
+    public AppDbContext(DbContextOptions<AppDbContext> options, IHttpContextAccessor httpContextAccessor)
         : base(options)
     {
+        _httpContextAccessor = httpContextAccessor;
     }
  
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -47,14 +49,30 @@ public class AppDbContext  : IdentityDbContext<AppUserEntity>
     
     public override int SaveChanges()
     {
-        var entities = ChangeTracker.Entries().Where(x => x is { Entity: BaseDateEntity, State: EntityState.Added or EntityState.Modified });
-        foreach (var entity in entities)
-        {
-            if (entity.State == EntityState.Added)
-            {
-                ((BaseEntity)entity.Entity).CreatedDate = DateTime.Now;
-            }
-        }
+        ApplyAuditInformation();
         return base.SaveChanges();
+    }
+    
+    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new())
+    {
+        ApplyAuditInformation();
+        return base.SaveChangesAsync(cancellationToken);
+    }
+
+    private void ApplyAuditInformation()
+    {
+        var entities = ChangeTracker.Entries().Where(x => x is { Entity: BaseAuditEntity, State: EntityState.Added or EntityState.Modified });
+        var userName = _httpContextAccessor.HttpContext?.User.Identity?.Name;
+        foreach (var entityEntry in entities)
+        {
+            if (entityEntry.State != EntityState.Added)
+            {
+                continue;
+            }
+            
+            var entity = (BaseAuditEntity) entityEntry.Entity;
+            entity.CreatedDate = DateTime.Now;
+            entity.CreatedBy = userName;
+        }
     }
 }

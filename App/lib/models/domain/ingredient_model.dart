@@ -5,6 +5,7 @@ part 'ingredient_model.g.dart';
 @JsonSerializable(explicitToJson: true)
 class IngredientModel {
   IngredientModel();
+  IngredientModel.fromValues(this.name, this.ingredientAmount, this.measurementUnit);
 
   String name = '';
   double ingredientAmount = 0;

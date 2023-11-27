@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Recipe.Persistence.Repositories;
@@ -20,6 +21,7 @@ public static class PersistenceStartup
             options.UseSqlServer(connectionString);
         });
         
+        serviceCollection.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         RegisterRepositories(serviceCollection);
     }
 

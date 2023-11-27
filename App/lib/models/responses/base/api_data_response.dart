@@ -17,7 +17,7 @@ class ApiDataResponse extends ApiResponse {
   @override
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = super.toJson();
-    data['ErrorMessages'] = errorMessages;
+    data['errorMessages'] = errorMessages;
     return data;
   }
 }

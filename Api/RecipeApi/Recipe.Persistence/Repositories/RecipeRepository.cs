@@ -6,46 +6,54 @@ using Recipe.Persistence.Repositories.Interfaces;
 
 namespace Recipe.Persistence.Repositories;
 
+// todo: Query projection
 public class RecipeRepository : IRecipeRepository
 {
-    private readonly DbContextOptions<AppDbContext> _options;
+    private readonly AppDbContext _dbContext;
     private readonly IMapper _mapper;
     private readonly ILogger<RecipeRepository> _logger;
-    private AppDbContext Context => new(_options);
 
     // todo : Base?
-    public RecipeRepository(DbContextOptions<AppDbContext> options, IMapper mapper, ILogger<RecipeRepository> logger)
+    public RecipeRepository(AppDbContext dbContext, IMapper mapper, ILogger<RecipeRepository> logger)
     {
-        _options = options;
+        _dbContext = dbContext;
         _mapper = mapper;
         _logger = logger;
     }
 
     public async Task<List<RecipeEntity>> GetAllRecipes()
     {
-        var recipes = await Context.Recipes.Include(x => x.Ingredients).ToListAsync();
+        var recipes = await _dbContext.Recipes
+            .Include(x => x.Ingredients)
+            .Include(x => x.LikedUsers)
+            .OrderByDescending(x => x.CreatedDate)
+            .ToListAsync();
         return recipes;
     }
     
     public async Task InsertRecipe(RecipeEntity entity)
     {
-        await using var context = Context;
-        await context.Set<RecipeEntity>().AddAsync(entity);
-        await context.SaveChangesAsync();
+        await _dbContext.Recipes.AddAsync(entity);
+        await _dbContext.SaveChangesAsync();
+    }    
+        
+    // todo: after moving to .net8 ExecuteDeleteAsync
+    public async Task DeleteRecipe(RecipeEntity entity)
+    {
+        _dbContext.Entry(entity).State = EntityState.Deleted;
+        await _dbContext.SaveChangesAsync();
     }    
     
     // todo separate repo?
     public async Task LikeRecipe(RecipeLikeEntity entity)
     {
-        await using var context = Context;
-        await context.Set<RecipeLikeEntity>().AddAsync(entity);
-        await context.SaveChangesAsync();
+        await _dbContext.AddAsync(entity);
+        await _dbContext.SaveChangesAsync();
     }    
     
     public async Task UnlikeRecipe(RecipeLikeEntity entity)
     {
-        await using var context = Context;
-        context.Set<RecipeLikeEntity>().Remove(entity);
-        await context.SaveChangesAsync();
+        _dbContext.RecipeLikes.Remove(entity);
+        await _dbContext.SaveChangesAsync();
     }
 }

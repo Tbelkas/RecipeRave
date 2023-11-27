@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Recipe.Api.Automapper.Models;
+using Recipe.Api.Models.Constants;
 using Recipe.Api.Models.Requests;
 using Recipe.Common.Models;
 using Recipe.Domain.Services.Interfaces;
@@ -30,12 +31,12 @@ public class RecipeController : ControllerBase
     [Authorize]
     public async Task<IActionResult> GetRecipes()
     {
-        var result = await _recipeService.GetRecipes();
-        var responseTuple = _mapper.Map<ApiResponseTuple<List<RecipeModel>>>(result);
+        var userId = _userManager.GetUserId(User);
+        var result = await _recipeService.GetRecipes(userId!);
+        var responseTuple = _mapper.Map<ApiResponseTuple<List<LikesRecipeModel>>>(result);
         return StatusCode((int)responseTuple.StatusCode, responseTuple.Response);
     }    
     
-    // todo: lazy loading
     [HttpPost]
     [Authorize]
     public async Task<IActionResult> CreateRecipe(CreateRecipeRequest request)
@@ -43,6 +44,15 @@ public class RecipeController : ControllerBase
         var recipeModel = _mapper.Map<RecipeModel>(request);
         var result = await _recipeService.CreateRecipe(recipeModel);
         // todo : Map to StatusCode directly?
+        var responseTuple = _mapper.Map<ApiResponseTuple>(result);
+        return StatusCode((int)responseTuple.StatusCode, responseTuple.Response);
+    }    
+    
+    [HttpDelete]
+    [Authorize(Roles = Roles.Admin)]
+    public async Task<IActionResult> DeleteRecipe(DeleteRecipeRequest request)
+    {
+        var result = await _recipeService.DeleteRecipe(request.RecipeId);
         var responseTuple = _mapper.Map<ApiResponseTuple>(result);
         return StatusCode((int)responseTuple.StatusCode, responseTuple.Response);
     }    

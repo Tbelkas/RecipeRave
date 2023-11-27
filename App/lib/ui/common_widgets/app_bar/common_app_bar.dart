@@ -1,6 +1,9 @@
 import 'package:app/models/constants/colors.dart';
+import 'package:app/services/auth_service.dart';
+import 'package:app/ui/login/login_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String text;
@@ -29,7 +32,12 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
                 textStyle: const TextStyle(fontSize: 12),
                 padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 2),
                 side: const BorderSide(width: 2.0, color: ACCENT_COLOR)),
-            onPressed: () {},
+            // todo: Move out to a service?
+            onPressed: () async {
+              await AuthService().logout();
+              Get.offAndToNamed(LoginScreen.routePath);
+              // todo clear controllers, add bindings
+            },
             child: const Text("Log out")),
       ) : null,
       leadingWidth: shouldDisplayLogout ? 80 : null,

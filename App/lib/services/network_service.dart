@@ -21,11 +21,11 @@ class NetworkService {
     return dio;
   }
 
-  Future<ApiDataResponse> execute<TReq>(NetworkRequest request, {
+  Future<ApiDataResponse> execute(NetworkRequest request, {
         ProgressCallback? onSendProgress,
         ProgressCallback? onReceiveProgress}) async {
     var dio = await getDefaultDioClient();
-    final req = PreparedNetworkRequest<TReq>(
+    final req = PreparedNetworkRequest(
       request,
       dio,
       ({..._headers, ...(request.headers ?? {})}),

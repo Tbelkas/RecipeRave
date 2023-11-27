@@ -2,9 +2,11 @@
 
 namespace Recipe.Persistence.Entities;
 
-public abstract class BaseDateEntity
+public abstract class BaseAuditEntity
 {
     [Required]
     public DateTime CreatedDate { get; set; }
-    //createdBy?
+
+    //todo: id instead of name
+    public string? CreatedBy { get; set; }
 }

@@ -3,7 +3,7 @@
 namespace Recipe.Persistence.Entities;
 
 [Table("RecipesLikes")]
-public class RecipeLikeEntity : BaseDateEntity
+public class RecipeLikeEntity : BaseAuditEntity
 {
     public string AppUserId;
     public AppUserEntity AppUser;

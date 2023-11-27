@@ -57,7 +57,6 @@ public class AuthenticationService : IAuthenticationService
         {
             return new Response($"Authentication failed");
         }
-
         var authClaims = new List<Claim>
         {
             new(ClaimTypes.NameIdentifier, user.Id),
@@ -65,7 +64,9 @@ public class AuthenticationService : IAuthenticationService
             new(ClaimTypes.Email, user.Email),
             new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
         };
-
+        
+        var claims = await _userManager.GetRolesAsync(user);
+        authClaims.AddRange(claims.Select(x => new Claim(ClaimTypes.Role, x)));
         var token = GetToken(authClaims);
         
         //todo better approach for token?
@@ -79,7 +80,7 @@ public class AuthenticationService : IAuthenticationService
         var token = new JwtSecurityToken(
             issuer: _configuration["JWT:ValidIssuer"],
             audience: _configuration["JWT:ValidAudience"],
-            expires: DateTime.Now.AddHours(72),
+            expires: DateTime.Now.AddDays(365), // refresh token
             claims: authClaims,
             signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256));
 

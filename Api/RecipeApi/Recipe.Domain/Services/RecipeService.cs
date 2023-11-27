@@ -20,18 +20,25 @@ public class RecipeService : IRecipeService
         _mapper = mapper;
     }
 
-    public async Task<IResponse> GetRecipes()
+    public async Task<IResponse> GetRecipes(string userId)
     {
-        // todo: don't expose entities
         var recipeEntities = await _recipeRepository.GetAllRecipes();
-        var recipes = _mapper.Map<List<RecipeModel>>(recipeEntities);
-        return new Response<List<RecipeModel>>(recipes);
+        var recipes = _mapper.Map<List<LikesRecipeModel>>(recipeEntities.Select(x => (x, userId)));
+        return new Response<List<LikesRecipeModel>>(recipes);
     }
 
     public async Task<IResponse> CreateRecipe(RecipeModel model)
     {
         var recipeEntity = _mapper.Map<RecipeEntity>(model);
         await _recipeRepository.InsertRecipe(recipeEntity);
+
+        return new Response();
+    }
+    
+    public async Task<IResponse> DeleteRecipe(int recipeId)
+    {
+        var recipeEntity = new RecipeEntity { Id = recipeId };
+        await _recipeRepository.DeleteRecipe(recipeEntity);
 
         return new Response();
     }

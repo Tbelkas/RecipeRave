@@ -25,30 +25,11 @@ public static class ServiceCollectionExtensions
             {
                 options.Password.RequireNonAlphanumeric = false;
                 options.SignIn.RequireConfirmedAccount = false;
-            }
-        )
+            })
             .AddEntityFrameworkStores<AppDbContext>()
             .AddDefaultTokenProviders();
-        
-        serviceCollection.AddAuthentication(options =>
-        {
-            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-        })
-            .AddJwtBearer(options =>
-            {
-                options.SaveToken = true;
-                options.RequireHttpsMetadata = false;
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidAudience = configuration["JWT:ValidAudience"],
-                    ValidIssuer = configuration["JWT:ValidIssuer"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"]))
-                };
-            });
+
+        serviceCollection.SetupAuthentication(configuration);
         serviceCollection.Configure<JsonOptions>(options =>
         {
             options.SerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
@@ -57,9 +38,22 @@ public static class ServiceCollectionExtensions
         serviceCollection.AddEndpointsApiExplorer();
         serviceCollection.AddControllers();
         
+        serviceCollection.SetupSwagger();
+      
+        serviceCollection.RegisterServices();
+    }
+
+    private static void RegisterServices(this IServiceCollection serviceCollection)
+    {
+        serviceCollection.AddTransient<IAuthenticationService, AuthenticationService>();
+        serviceCollection.AddTransient<IMapper, Mapper>();
+    }
+
+    private static void SetupSwagger(this IServiceCollection serviceCollection)
+    {
         serviceCollection.AddSwaggerGen(c =>
         {
-            c.SwaggerDoc("v1", new OpenApiInfo { Title = "Wedding Planner API", Version = "v1" });
+            c.SwaggerDoc("v1", new OpenApiInfo { Title = "Recipe rave API", Version = "v1" });
             c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
             {
                 Description = @"JWT Authorization header using the Bearer scheme. \r\n\r\n 
@@ -89,12 +83,28 @@ public static class ServiceCollectionExtensions
             });
         });
 
-        serviceCollection.RegisterServices();
     }
 
-    private static void RegisterServices(this IServiceCollection serviceCollection)
+    private static void SetupAuthentication(this IServiceCollection serviceCollection, IConfiguration configuration)
     {
-        serviceCollection.AddTransient<IAuthenticationService, AuthenticationService>();
-        serviceCollection.AddTransient<IMapper, Mapper>();
+        serviceCollection.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.SaveToken = true;
+                options.RequireHttpsMetadata = false;
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidAudience = configuration["JWT:ValidAudience"],
+                    ValidIssuer = configuration["JWT:ValidIssuer"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"]))
+                };
+            });
     }
 }

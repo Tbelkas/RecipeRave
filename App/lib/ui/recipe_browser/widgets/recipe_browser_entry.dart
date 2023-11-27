@@ -1,11 +1,14 @@
 import 'package:app/models/constants/colors.dart';
 import 'package:app/models/domain/ingredient_model.dart';
+import 'package:app/models/domain/likes_recipe_model.dart';
 import 'package:app/models/domain/recipe_model.dart';
 import 'package:app/ui/common_widgets/common_text_button.dart';
+import 'package:app/ui/common_widgets/recipe/recipe_ingredients_column_widget.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class RecipeBrowserEntry extends StatelessWidget {
-  final RecipeModel recipeModel;
+  final LikesRecipeModel recipeModel;
   final Function(RecipeModel) onDetailsButtonPressed;
 
   const RecipeBrowserEntry({super.key, required this.recipeModel, required this.onDetailsButtonPressed});
@@ -20,23 +23,16 @@ class RecipeBrowserEntry extends StatelessWidget {
         padding: const EdgeInsets.all(4.0),
         child: Container(
           padding: const EdgeInsets.all(4.0),
-          decoration: const BoxDecoration(
-            border: Border(
-              top: BorderSide(color: PRIMARY_COLOR, width: 2),
-              left: BorderSide(color: PRIMARY_COLOR, width: 2),
-              right: BorderSide(color: PRIMARY_COLOR, width: 2),
-              bottom: BorderSide(color: PRIMARY_COLOR, width: 2),
-            ),
-          ),
+          decoration: BoxDecoration(border: Border.all(color: PRIMARY_COLOR, width: 2)),
           child: Column(
             children: [
-              const Align(
+              Align(
                 alignment: Alignment.topRight,
-                child: Text('2023-11-25 Babinskas'),
+                child: Text('${recipeModel.createdDate.year}-${recipeModel.createdDate.month}-${recipeModel.createdDate.day} ${recipeModel.createdBy}'),
               ),
               Align(
                 alignment: Alignment.topLeft,
-                child: Text('${recipeModel.name}'),
+                child: Text(recipeModel.name, style: Theme.of(context).textTheme.headlineSmall),
               ),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -54,21 +50,42 @@ class RecipeBrowserEntry extends StatelessWidget {
                       flex: 8,
                       child: Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: recipeModel.ingredients.map((e) => constructInstructionEntry(e)).toList())))
+                          child: RecipeIngredientsColumnWidget(ingredients: recipeModel.ingredients, iterationStopPoint: 5)))
                 ],
               ),
               Row(
                 children: [
-                  const Expanded(flex: 2, child: Text("you and 4 other like it")),
+                  Expanded(flex: 2, child: Text(_getLikeText())),
                   Expanded(flex: 2, child: CommonTextButton(text: "See full recipe", onPressed: () => onDetailsButtonPressed(recipeModel))),
                 ],
               )
             ],
           ),
         ));
+  }
+
+  // todo: constants strings with values inserted into them for better management / p11n
+  String _getLikeText(){
+    var count = recipeModel.likeCount;
+    if(count == 0){
+      return "No likes";
+    }
+    String likeText = '';
+
+    if(recipeModel.hasUserLiked){
+      likeText += "You ";
+      if(count > 1){
+
+        likeText += "and ${count-1} ${count == 2 ? 'other' : 'others'} ";
+      }
+    }
+
+    if(!recipeModel.hasUserLiked && count > 0){
+      likeText += "$count ";
+    }
+
+
+    likeText += "like it";
+    return likeText;
   }
 }

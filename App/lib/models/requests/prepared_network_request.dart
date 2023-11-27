@@ -5,7 +5,7 @@ import 'package:app/models/responses/base/api_data_response.dart';
 import 'package:app/models/responses/base/api_response.dart';
 import 'package:dio/dio.dart';
 
-class PreparedNetworkRequest<TReq> {
+class PreparedNetworkRequest {
   const PreparedNetworkRequest(this.request, this.dio, this.headers, this.onSendProgress, this.onReceiveProgress);
 
   final NetworkRequest request;
@@ -57,9 +57,13 @@ class PreparedNetworkRequest<TReq> {
 
       return ApiDataResponse.fromJson(response.data);
     } on DioException catch (error) {
-      var errorResponse = ApiDataResponse.fromJson(error.response!.data);
+      if(error.response != null){
+        var errorResponse = ApiDataResponse.fromJson(error.response!.data);
 
-      return errorResponse;
+        return errorResponse;
+      }
+
+      return ApiDataResponse(errorMessages: ["Something wrong happened"]);
     } catch (error) {
       // todo: hide error
       return ApiDataResponse(errorMessages: [error.toString()]);
