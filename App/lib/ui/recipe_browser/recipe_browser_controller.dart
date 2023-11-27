@@ -1,3 +1,4 @@
+import 'package:app/common/common_snackbar.dart';
 import 'package:app/models/domain/likes_recipe_model.dart';
 import 'package:app/models/domain/recipe_model.dart';
 import 'package:app/services/recipe_service.dart';
@@ -17,7 +18,7 @@ class RecipeBrowserController extends GetxController{
   }
 
   onNewRecipe() async{
-    Get.toNamed(RecipeCreateScreen.routePath);
+     Get.toNamed(RecipeCreateScreen.routePath);
   }
 
   onRecipeDetailsPressed(RecipeModel recipeModel) async{
@@ -29,10 +30,13 @@ class RecipeBrowserController extends GetxController{
 
   _get_recipes() async{
     var result = await _recipeService.getRecipes();
-    if(result.isSuccess){
-      // todo:
-      final mappedData = (result.data as List).map((e) => LikesRecipeModel.fromJson(e));
-      recipes.value = mappedData.toList();
+    if(!result.isSuccess){
+      CommonSnackbar.show(result.errorMessages!.first);
+      return;
     }
+
+    final mappedData = (result.data as List).map((e) => LikesRecipeModel.fromJson(e));
+    recipes.value = mappedData.toList();
+    // todo: display refresh button on fail
   }
 }

@@ -1,4 +1,5 @@
 
+import 'package:app/common/common_snackbar.dart';
 import 'package:app/models/constants/storage_keys.dart';
 import 'package:app/models/responses/login_response.dart';
 import 'package:app/services/auth_service.dart';
@@ -18,7 +19,7 @@ class LoginController extends GetxController{
 
   final userNameController = TextEditingController();
   final passwordController = TextEditingController();
-  final errors = <String>[""].obs;
+  final formKey = GlobalKey<FormState>();
 
   @override
   onInit(){
@@ -34,7 +35,7 @@ class LoginController extends GetxController{
 
     var result = await authService.login(loginModel.value);
     if (!result.isSuccess){
-      errors.value = result.errorMessages!;
+      CommonSnackbar.show(result.errorMessages!.first);
       return;
     }
 
@@ -43,11 +44,14 @@ class LoginController extends GetxController{
     // todo: Refresh tokens?
     GetStorage().write(tokenKey, resultData.token);
 
-    // todo: Starting to get messy, global router?
     Get.offAllNamed(RecipeBrowserScreen.routePath);
   }
 
   onRegister() async {
-    userName.value = (await Get.toNamed(RegisterScreen.routePath)).toString();
+    var returnedValue = (await Get.toNamed(RegisterScreen.routePath));
+    if(returnedValue != null){
+      userName.value = returnedValue.toString();
+      CommonSnackbar.show("Registration successful");
+    }
   }
 }

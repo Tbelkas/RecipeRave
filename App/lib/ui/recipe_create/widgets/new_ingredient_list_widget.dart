@@ -1,6 +1,3 @@
-import 'dart:developer';
-import 'dart:ffi';
-
 import 'package:app/models/constants/colors.dart';
 import 'package:app/models/domain/ingredient_model.dart';
 import 'package:app/ui/common_widgets/common_text_button.dart';
@@ -17,9 +14,7 @@ class NewIngredientListWidget extends StatefulWidget {
   final newAmountController = TextEditingController();
   var selectedMeasurement = 0;
 
-  NewIngredientListWidget({super.key, required this.onSave}){
-    ingredients.add(IngredientModel.fromValues("bab", 1, 1));
-  }
+  NewIngredientListWidget({super.key, required this.onSave});
 
   @override
   State<StatefulWidget> createState() => _NewIngredientListState();

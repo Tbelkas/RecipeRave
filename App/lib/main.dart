@@ -1,3 +1,4 @@
+import 'package:app/bindings/recipe_browser_binding.dart';
 import 'package:app/bindings/recipe_details_binding.dart';
 import 'package:app/models/constants/storage_keys.dart';
 import 'package:app/ui/login/login_controller.dart';
@@ -23,7 +24,6 @@ void main() async {
   // todo: lazyloading
   Get.put(LoginController());
   Get.put(RegisterController());
-  Get.put(RecipeBrowserController());
   Get.put(RecipeCreateController());
 
   // todo: back to login screen on 401
@@ -83,7 +83,7 @@ class MyApp extends StatelessWidget {
         ),
         GetPage(
           name: RecipeBrowserScreen.routePath,
-          page: () => const RecipeBrowserScreen(),
+          page: () => const RecipeBrowserScreen(),binding: RecipeBrowserBinding()
         ),
         GetPage(name: RecipeDetailsScreen.routePath, page: () => RecipeDetailsScreen(), binding: RecipeDetailsBinding()),
         GetPage(name: RecipeCreateScreen.routePath, page: () => const RecipeCreateScreen())
