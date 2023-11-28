@@ -10,7 +10,7 @@ DeleteRecipeRequest _$DeleteRecipeRequestFromJson(Map<String, dynamic> json) =>
     DeleteRecipeRequest()..recipeId = json['recipeId'] as int;
 
 Map<String, dynamic> _$DeleteRecipeRequestToJson(
-    DeleteRecipeRequest instance) =>
+        DeleteRecipeRequest instance) =>
     <String, dynamic>{
       'recipeId': instance.recipeId,
     };

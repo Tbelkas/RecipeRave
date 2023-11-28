@@ -19,7 +19,7 @@ class RecipeService {
   }
 
   Future<ApiDataResponse> createRecipe(RecipeModel model) async{
-    var networkRequest = const NetworkRequest(type: NetworkRequestType.POST, path: "/");
+    var networkRequest = NetworkRequest(type: NetworkRequestType.POST, path: "/", data: model.toJson());
     var result = await _networkService.execute(networkRequest);
     return result;
   }

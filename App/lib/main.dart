@@ -1,13 +1,12 @@
+import 'package:app/bindings/login_binding.dart';
 import 'package:app/bindings/recipe_browser_binding.dart';
+import 'package:app/bindings/recipe_create_binding.dart';
 import 'package:app/bindings/recipe_details_binding.dart';
+import 'package:app/bindings/register_binding.dart';
 import 'package:app/models/constants/storage_keys.dart';
-import 'package:app/ui/login/login_controller.dart';
-import 'package:app/ui/recipe_browser/recipe_browser_controller.dart';
 import 'package:app/ui/recipe_browser/recipe_browser_screen.dart';
-import 'package:app/ui/recipe_create/recipe_create_controller.dart';
 import 'package:app/ui/recipe_create/recipe_create_screen.dart';
 import 'package:app/ui/recipe_details/recipe_details_screen.dart';
-import 'package:app/ui/register/register_controller.dart';
 import 'package:app/ui/register/register_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -17,15 +16,9 @@ import 'package:google_fonts/google_fonts.dart';
 
 import 'ui/login/login_screen.dart';
 
-
 //todo : common input/text theme
 void main() async {
   await GetStorage.init();
-  // todo: lazyloading
-  Get.put(LoginController());
-  Get.put(RegisterController());
-  Get.put(RecipeCreateController());
-
   // todo: back to login screen on 401
   final bool isLoggedIn = GetStorage().read(tokenKey) != null;
 
@@ -64,29 +57,15 @@ class MyApp extends StatelessWidget {
               letterSpacing: 2.0,
               fontSize: 16.0,
             ),
-            bodySmall: GoogleFonts.lato(
-              color: Colors.black,
-              letterSpacing: 2.0,
-              fontSize: 12.0,
-              fontStyle: FontStyle.italic
-            )),
+            bodySmall: GoogleFonts.lato(color: Colors.black, letterSpacing: 2.0, fontSize: 12.0, fontStyle: FontStyle.italic)),
       ),
       initialRoute: initialRoute,
       getPages: [
-        GetPage(
-          name: LoginScreen.routePath,
-          page: () => LoginScreen(),
-        ),
-        GetPage(
-          name: RegisterScreen.routePath,
-          page: () => const RegisterScreen(),
-        ),
-        GetPage(
-          name: RecipeBrowserScreen.routePath,
-          page: () => const RecipeBrowserScreen(),binding: RecipeBrowserBinding()
-        ),
+        GetPage(name: LoginScreen.routePath, page: () => LoginScreen(), binding: LoginBinding()),
+        GetPage(name: RegisterScreen.routePath, page: () => const RegisterScreen(), binding: RegisterBinding()),
+        GetPage(name: RecipeBrowserScreen.routePath, page: () => const RecipeBrowserScreen(), binding: RecipeBrowserBinding()),
         GetPage(name: RecipeDetailsScreen.routePath, page: () => RecipeDetailsScreen(), binding: RecipeDetailsBinding()),
-        GetPage(name: RecipeCreateScreen.routePath, page: () => const RecipeCreateScreen())
+        GetPage(name: RecipeCreateScreen.routePath, page: () => const RecipeCreateScreen(), binding: RecipeCreateBinding())
       ],
     );
   }

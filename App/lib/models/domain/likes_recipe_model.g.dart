@@ -14,6 +14,7 @@ LikesRecipeModel _$LikesRecipeModelFromJson(Map<String, dynamic> json) =>
       ..ingredients = (json['ingredients'] as List<dynamic>)
           .map((e) => IngredientModel.fromJson(e as Map<String, dynamic>))
           .toList()
+      ..base64Image = json['base64Image'] as String?
       ..likeCount = json['likeCount'] as int
       ..hasUserLiked = json['hasUserLiked'] as bool
       ..createdBy = json['createdBy'] as String
@@ -25,6 +26,7 @@ Map<String, dynamic> _$LikesRecipeModelToJson(LikesRecipeModel instance) =>
       'name': instance.name,
       'description': instance.description,
       'ingredients': instance.ingredients.map((e) => e.toJson()).toList(),
+      'base64Image': instance.base64Image,
       'likeCount': instance.likeCount,
       'hasUserLiked': instance.hasUserLiked,
       'createdBy': instance.createdBy,

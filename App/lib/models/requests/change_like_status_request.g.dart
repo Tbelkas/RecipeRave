@@ -7,11 +7,11 @@ part of 'change_like_status_request.dart';
 // **************************************************************************
 
 ChangeLikeStatusRequest _$ChangeLikeStatusRequestFromJson(
-    Map<String, dynamic> json) =>
+        Map<String, dynamic> json) =>
     ChangeLikeStatusRequest()..recipeId = json['recipeId'] as int;
 
 Map<String, dynamic> _$ChangeLikeStatusRequestToJson(
-    ChangeLikeStatusRequest instance) =>
+        ChangeLikeStatusRequest instance) =>
     <String, dynamic>{
       'recipeId': instance.recipeId,
     };

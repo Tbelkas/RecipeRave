@@ -17,6 +17,7 @@ public class RecipeProfile : Profile
             .ForMember(dest => dest.Ingredients, opt => opt.MapFrom(src => src.recipe.Ingredients))
             .ForMember(dest => dest.CreatedBy, opt => opt.MapFrom(src => src.recipe.CreatedBy))
             .ForMember(dest => dest.CreatedDate, opt => opt.MapFrom(src => src.recipe.CreatedDate))
+            .ForMember(dest => dest.Base64Image, opt => opt.MapFrom(src => src.recipe.Base64Image))
             .ForMember(dest => dest.LikeCount, opt => 
                 opt.MapFrom(src => src.recipe.LikedUsers.Count))
             .ForMember(dest => dest.HasUserLiked, opt => 

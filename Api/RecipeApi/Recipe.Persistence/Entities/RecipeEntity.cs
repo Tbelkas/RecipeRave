@@ -10,4 +10,8 @@ public class RecipeEntity : BaseEntity
     public string Description { get; set; }
     public List<IngredientEntity> Ingredients { get; set; } 
     public List<AppUserEntity> LikedUsers { get; set; }
+    
+    // todo : store url and keep link to cdn 
+    public string? Base64Image { get; set; }
+
 }

@@ -14,9 +14,6 @@ class LoginController extends GetxController{
   late final AuthService authService;
   final loginModel = LoginModel().obs;
 
-  final userName = ''.obs;
-  final password = ''.obs;
-
   final userNameController = TextEditingController();
   final passwordController = TextEditingController();
   final formKey = GlobalKey<FormState>();
@@ -50,7 +47,7 @@ class LoginController extends GetxController{
   onRegister() async {
     var returnedValue = (await Get.toNamed(RegisterScreen.routePath));
     if(returnedValue != null){
-      userName.value = returnedValue.toString();
+      userNameController.text = returnedValue.toString();
       CommonSnackbar.show("Registration successful");
     }
   }

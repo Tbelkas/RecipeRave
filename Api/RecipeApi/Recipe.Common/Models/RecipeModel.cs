@@ -6,5 +6,5 @@ public class RecipeModel
     public string Name { get; set; }
     public string Description { get; set; }
     public List<IngredientModel> Ingredients { get; set; }
-    // todo: Image
+    public string Base64Image { get; set; } 
 }

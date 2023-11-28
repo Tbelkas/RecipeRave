@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Recipe.Common.Models;
-using Recipe.Common.Models.Enums;
 using Recipe.Common.Models.Responses.Base;
 using Recipe.Domain.Services.Interfaces;
 using Recipe.Persistence.Entities;

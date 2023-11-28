@@ -18,7 +18,14 @@ class RecipeBrowserController extends GetxController{
   }
 
   onNewRecipe() async{
-     Get.toNamed(RecipeCreateScreen.routePath);
+    var createdModel = await Get.toNamed(RecipeCreateScreen.routePath);
+
+    // todo : only update if successful and without calling the BE
+    if(createdModel != null && createdModel is RecipeModel){
+      _get_recipes();
+      recipes.refresh();
+      CommonSnackbar.show("${createdModel.name} created");
+    }
   }
 
   onRecipeDetailsPressed(RecipeModel recipeModel) async{

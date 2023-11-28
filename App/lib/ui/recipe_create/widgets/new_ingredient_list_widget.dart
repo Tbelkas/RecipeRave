@@ -8,13 +8,13 @@ import 'package:get/get.dart';
 
 class NewIngredientListWidget extends StatefulWidget {
   final ingredients = List<IngredientModel>.empty(growable: true);
-  final Function(List<IngredientModel>) onSave;
+  final Function(List<IngredientModel>) onIngredientChange;
   final List<String> list = <String>['One', 'Two', 'Three', 'Four']; // todo mesurements
   final newIngredientTextController = TextEditingController();
   final newAmountController = TextEditingController();
   var selectedMeasurement = 0;
 
-  NewIngredientListWidget({super.key, required this.onSave});
+  NewIngredientListWidget({super.key, required this.onIngredientChange});
 
   @override
   State<StatefulWidget> createState() => _NewIngredientListState();
@@ -35,6 +35,7 @@ class _NewIngredientListState extends State<NewIngredientListWidget> {
                 Column(children: widget.ingredients.map((e) => NewIngredientWidget(e, (e)
                 {
                   widget.ingredients.remove(e);
+                  widget.onIngredientChange(widget.ingredients);
                   setState((){});
 
                 }
@@ -99,8 +100,9 @@ class _NewIngredientListState extends State<NewIngredientListWidget> {
   }
 
   _createNewIngredient() {
-    var newIngredient = IngredientModel.fromValues(widget.newAmountController.text, double.parse(widget.newAmountController.text), widget.selectedMeasurement);
+    var newIngredient = IngredientModel.fromValues(widget.newIngredientTextController.text, double.parse(widget.newAmountController.text), widget.selectedMeasurement);
     widget.ingredients.add(newIngredient);
+    widget.onIngredientChange(widget.ingredients);
     setState((){}); // todo: fix
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:app/models/constants/colors.dart';
 import 'package:app/models/domain/ingredient_model.dart';
 import 'package:app/models/domain/likes_recipe_model.dart';
@@ -41,10 +43,10 @@ class RecipeBrowserEntry extends StatelessWidget {
                       flex: 5,
                       child: AspectRatio(
                         aspectRatio: 16 / 9,
-                        child: Image.asset(
+                        child: recipeModel.base64Image == null ? Image.asset(
                           'assets/recipe_picture_placeholder.jpg',
                           fit: BoxFit.cover,
-                        ),
+                        ) : Image.memory(base64Decode(recipeModel.base64Image!)),
                       )),
                   Expanded(
                       flex: 8,

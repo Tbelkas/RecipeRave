@@ -29,6 +29,7 @@ dependencies:
   dio: ^5.3.3
   get_storage:
   jwt_decoder:
+  image_picker:
 dev_dependencies:
   flutter_test:
     sdk: flutter
