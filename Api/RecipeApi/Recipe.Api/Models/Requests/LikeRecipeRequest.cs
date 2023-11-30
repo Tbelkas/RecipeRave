@@ -2,7 +2,4 @@
 
 namespace Recipe.Api.Models.Requests;
 
-public class LikeRecipeRequest : ChangeLikeStatus
-{
-    
-}
+public class LikeRecipeRequest : ChangeLikeStatus;

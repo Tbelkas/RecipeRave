@@ -2,5 +2,6 @@
 
 public class DeleteRecipeRequest
 {
-    public int RecipeId { get; set; }
+    // ReSharper disable once UnusedAutoPropertyAccessor.Global
+    public required int RecipeId { get; set; }
 }

@@ -4,5 +4,5 @@ public enum StatusCode
 {
     Ok,
     ArgumentError,
-    NotFound,
+    NotFound
 }

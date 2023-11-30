@@ -6,7 +6,7 @@ public interface IRecipeRepository
 {
     Task<List<RecipeEntity>> GetAllRecipes();
     Task InsertRecipe(RecipeEntity entity);
-    Task DeleteRecipe(RecipeEntity entity);
+    Task DeleteRecipe(int id);
     Task LikeRecipe(RecipeLikeEntity entity);
     Task UnlikeRecipe(RecipeLikeEntity entity);
 }

@@ -1,4 +1,4 @@
-﻿using System.Net;
+﻿// ReSharper disable SuggestBaseTypeForParameterInConstructor
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -14,26 +14,17 @@ namespace Recipe.Api.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class RecipeController : ControllerBase
+public class RecipeController(UserManager<AppUserEntity> userManager, IRecipeService recipeService, IMapper mapper) : ControllerBase
 {
-    private readonly IRecipeService _recipeService;
-    private readonly IMapper _mapper;
-    private readonly UserManager<AppUserEntity> _userManager;
-    public RecipeController(UserManager<AppUserEntity> userManager, IRecipeService recipeService, IMapper mapper)
-    {
-        _recipeService = recipeService;
-        _mapper = mapper;
-        _userManager = userManager;
-    }
     
     // todo: lazy loading
     [HttpGet]
     [Authorize]
     public async Task<IActionResult> GetRecipes()
     {
-        var userId = _userManager.GetUserId(User);
-        var result = await _recipeService.GetRecipes(userId!);
-        var responseTuple = _mapper.Map<ApiResponseTuple<List<LikesRecipeModel>>>(result);
+        var userId = userManager.GetUserId(User);
+        var result = await recipeService.GetRecipes(userId!);
+        var responseTuple = mapper.Map<ApiResponseTuple<List<LikesRecipeModel>>>(result);
         return StatusCode((int)responseTuple.StatusCode, responseTuple.Response);
     }    
     
@@ -41,10 +32,10 @@ public class RecipeController : ControllerBase
     [Authorize]
     public async Task<IActionResult> CreateRecipe(CreateRecipeRequest request)
     {
-        var recipeModel = _mapper.Map<RecipeModel>(request);
-        var result = await _recipeService.CreateRecipe(recipeModel);
+        var recipeModel = mapper.Map<RecipeModel>(request);
+        var result = await recipeService.CreateRecipe(recipeModel);
         // todo : Map to StatusCode directly?
-        var responseTuple = _mapper.Map<ApiResponseTuple>(result);
+        var responseTuple = mapper.Map<ApiResponseTuple>(result);
         return StatusCode((int)responseTuple.StatusCode, responseTuple.Response);
     }    
     
@@ -52,8 +43,8 @@ public class RecipeController : ControllerBase
     [Authorize(Roles = Roles.Admin)]
     public async Task<IActionResult> DeleteRecipe(DeleteRecipeRequest request)
     {
-        var result = await _recipeService.DeleteRecipe(request.RecipeId);
-        var responseTuple = _mapper.Map<ApiResponseTuple>(result);
+        var result = await recipeService.DeleteRecipe(request.RecipeId);
+        var responseTuple = mapper.Map<ApiResponseTuple>(result);
         return StatusCode((int)responseTuple.StatusCode, responseTuple.Response);
     }    
     
@@ -62,10 +53,10 @@ public class RecipeController : ControllerBase
     [Authorize]
     public async Task<IActionResult> LikeRecipe(LikeRecipeRequest request)
     {
-        var userId = _userManager.GetUserId(User);
-        var likeModel = _mapper.Map<RecipeLikeModel>((request.RecipeId, userId));
-        var result = await _recipeService.LikeRecipe(likeModel);
-        var responseTuple = _mapper.Map<ApiResponseTuple>(result);
+        var userId = userManager.GetUserId(User);
+        var likeModel = mapper.Map<RecipeLikeModel>((request.RecipeId, userId));
+        var result = await recipeService.LikeRecipe(likeModel);
+        var responseTuple = mapper.Map<ApiResponseTuple>(result);
         return StatusCode((int)responseTuple.StatusCode, responseTuple.Response);
     }
         
@@ -74,10 +65,10 @@ public class RecipeController : ControllerBase
     [Authorize]
     public async Task<IActionResult> UnlikeRecipe(UnlikeRecipeRequest request)
     {
-        var userId = _userManager.GetUserId(User);
-        var likeModel = _mapper.Map<RecipeLikeModel>((request.RecipeId, userId));
-        var result = await _recipeService.UnlikeRecipe(likeModel);
-        var responseTuple = _mapper.Map<ApiResponseTuple>(result);
+        var userId = userManager.GetUserId(User);
+        var likeModel = mapper.Map<RecipeLikeModel>((request.RecipeId, userId));
+        var result = await recipeService.UnlikeRecipe(likeModel);
+        var responseTuple = mapper.Map<ApiResponseTuple>(result);
         return StatusCode((int)responseTuple.StatusCode, responseTuple.Response);
     }
     

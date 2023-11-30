@@ -4,13 +4,11 @@ using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.OpenApi.Models;
 using Recipe.Api.Services;
-using Recipe.Common;
 using Recipe.Persistence;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.IdentityModel.Tokens;
 using Recipe.Api.Services.Interfaces;
-using Recipe.Common.Models;
 using Recipe.Persistence.Entities;
 
 namespace Recipe.Api.Extensions;
@@ -56,15 +54,17 @@ public static class ServiceCollectionExtensions
             c.SwaggerDoc("v1", new OpenApiInfo { Title = "Recipe rave API", Version = "v1" });
             c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
             {
-                Description = @"JWT Authorization header using the Bearer scheme. \r\n\r\n 
-                      Enter 'Bearer' [space] and then your token in the text input below.
-                      \r\n\r\nExample: 'Bearer 12345abcdef'",
+                Description = """
+                              JWT Authorization header using the Bearer scheme. \r\n\r\n
+                                                    Enter 'Bearer' [space] and then your token in the text input below.
+                                                    \r\n\r\nExample: 'Bearer 12345abcdef'
+                              """,
                 Name = "Authorization",
                 In = ParameterLocation.Header,
                 Type = SecuritySchemeType.ApiKey,
                 Scheme = "Bearer"
             });
-            c.AddSecurityRequirement(new OpenApiSecurityRequirement()
+            c.AddSecurityRequirement(new OpenApiSecurityRequirement
             {
                 {
                     new OpenApiSecurityScheme
@@ -76,7 +76,7 @@ public static class ServiceCollectionExtensions
                         },
                         Scheme = "oauth2",
                         Name = "Bearer",
-                        In = ParameterLocation.Header,
+                        In = ParameterLocation.Header
                     },
                     new List<string>()
                 }
@@ -103,7 +103,7 @@ public static class ServiceCollectionExtensions
                     ValidateAudience = true,
                     ValidAudience = configuration["JWT:ValidAudience"],
                     ValidIssuer = configuration["JWT:ValidIssuer"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"]))
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"]!))
                 };
             });
     }

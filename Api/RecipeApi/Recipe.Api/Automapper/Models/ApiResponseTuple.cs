@@ -5,12 +5,12 @@ namespace Recipe.Api.Automapper.Models;
 
 public class ApiResponseTuple<T>
 {
-    public ApiResponse<T> Response { get; set; }
-    public HttpStatusCode StatusCode { get; set; }
+    public required ApiResponse<T> Response { get; init; }
+    public HttpStatusCode StatusCode { get; init; }
 }
 
 public class ApiResponseTuple
 {
-    public ApiResponse Response { get; set; }
-    public HttpStatusCode StatusCode { get; set; }
+    public required ApiResponse Response { get; init; }
+    public HttpStatusCode StatusCode { get; init; }
 }

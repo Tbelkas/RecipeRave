@@ -4,6 +4,7 @@ using Recipe.Persistence.Entities;
 
 namespace Recipe.Domain.Automapper;
 
+// ReSharper disable once UnusedType.Global
 public class RecipeLikeProfile : Profile
 {
     public RecipeLikeProfile()

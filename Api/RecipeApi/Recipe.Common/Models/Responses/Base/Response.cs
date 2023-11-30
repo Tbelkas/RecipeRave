@@ -1,4 +1,4 @@
-﻿using System.Net;
+﻿// ReSharper disable UnusedAutoPropertyAccessor.Global
 using Recipe.Common.Models.Enums;
 
 namespace Recipe.Common.Models.Responses.Base;

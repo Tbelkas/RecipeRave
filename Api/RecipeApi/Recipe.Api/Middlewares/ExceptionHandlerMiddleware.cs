@@ -1,27 +1,16 @@
 ﻿using System.Net;
 using System.Text.Json;
-using Recipe.Api.Models;
 using Recipe.Api.Models.Responses.Base;
-using Recipe.Common.Models.Responses.Base;
 
 namespace Recipe.Api.Middlewares;
 
-public class ExceptionHandlerMiddleware
+public class ExceptionHandlerMiddleware(ILogger<ExceptionHandlerMiddleware> logger, RequestDelegate next)
 {
-    private readonly ILogger<ExceptionHandlerMiddleware> _logger;
-    private readonly RequestDelegate _next;
-
-    public ExceptionHandlerMiddleware(ILogger<ExceptionHandlerMiddleware> logger, RequestDelegate next)
-    {
-        _logger = logger;
-        _next = next;
-    }
-
     public async Task Invoke(HttpContext context)
     {
         try
         {
-            await _next(context);
+            await next(context);
         }
         catch (Exception exception)
         {
@@ -33,7 +22,7 @@ public class ExceptionHandlerMiddleware
             
             var response = context.Response;
             var exceptionMessage = exception.Message;
-            _logger.LogError(
+            logger.LogError(
                 "Error Message: {exceptionMessage}, Time of occurrence {time}",
                 exceptionMessage, DateTime.UtcNow);
 

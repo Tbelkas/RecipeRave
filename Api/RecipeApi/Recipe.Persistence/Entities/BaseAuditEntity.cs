@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿// ReSharper disable EntityFramework.ModelValidation.UnlimitedStringLength todo
+
+using System.ComponentModel.DataAnnotations;
 
 namespace Recipe.Persistence.Entities;
 

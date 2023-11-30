@@ -3,7 +3,7 @@ using Recipe.Common.Models;
 using Recipe.Persistence.Entities;
 
 namespace Recipe.Domain.Automapper;
-
+// ReSharper disable once UnusedType.Global
 public class RecipeProfile : Profile
 {
     public RecipeProfile()
@@ -19,9 +19,9 @@ public class RecipeProfile : Profile
             .ForMember(dest => dest.CreatedDate, opt => opt.MapFrom(src => src.recipe.CreatedDate))
             .ForMember(dest => dest.Base64Image, opt => opt.MapFrom(src => src.recipe.Base64Image))
             .ForMember(dest => dest.LikeCount, opt => 
-                opt.MapFrom(src => src.recipe.LikedUsers.Count))
+                opt.MapFrom(src => src.recipe.LikedUsers != null ? src.recipe.LikedUsers.Count : 0))
             .ForMember(dest => dest.HasUserLiked, opt => 
-                opt.MapFrom(src => src.recipe.LikedUsers.Select(x => x.Id).Contains(src.userId)));
+                opt.MapFrom(src => src.recipe.LikedUsers != null && src.recipe.LikedUsers.Select(x => x.Id).Contains(src.userId)));
         
         CreateMap<IngredientModel, IngredientEntity>().ReverseMap();
     }

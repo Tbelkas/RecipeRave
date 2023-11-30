@@ -1,6 +1,7 @@
-﻿namespace Recipe.Api.Models.Responses;
+﻿// ReSharper disable UnusedAutoPropertyAccessor.Global
+namespace Recipe.Api.Models.Responses;
 
 public class LoginResponse
 {
-    public string Token { get; set; }
+    public required string Token { get; set; }
 }

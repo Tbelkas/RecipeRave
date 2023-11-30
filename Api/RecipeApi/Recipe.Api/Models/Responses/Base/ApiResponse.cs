@@ -5,7 +5,7 @@ namespace Recipe.Api.Models.Responses.Base;
 public class ApiResponse<T> : ApiResponse
 {
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public T? Data { get; set; }
+    public T? Data { get; init; }
 
     public ApiResponse()
     {

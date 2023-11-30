@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿// ReSharper disable EntityFramework.ModelValidation.UnlimitedStringLength todo
+
+using System.ComponentModel.DataAnnotations.Schema;
 using Recipe.Common.Models.Enums;
 
 namespace Recipe.Persistence.Entities;
@@ -6,10 +8,10 @@ namespace Recipe.Persistence.Entities;
 [Table("Ingredients")]
 public class IngredientEntity : BaseEntity
 {
-    public string Name { get; set; }
+    public required string Name { get; init; }
     [Column(TypeName = "decimal(8,4)")]
-    public decimal IngredientAmount { get; set; }
-    public MeasurementUnit MeasurementUnit { get; set; }
-    public int RecipeId { get; set; }
-    public RecipeEntity Recipe { get; set; }
+    public decimal IngredientAmount { get; init; }
+    public MeasurementUnit MeasurementUnit { get; init; }
+    public int RecipeId { get; init; }
+    public RecipeEntity? Recipe { get; init; }
 }

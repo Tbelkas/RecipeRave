@@ -30,10 +30,13 @@ if (app.Environment.IsDevelopment())
     });
 }
 
+app.Run();
+return;
+
 async Task CreateRoles(IServiceProvider serviceCollection)
 {
     using var scope = serviceCollection.CreateScope();
-    var roleManager = (RoleManager<IdentityRole>)scope.ServiceProvider.GetService(typeof(RoleManager<IdentityRole>));
+    var roleManager = (RoleManager<IdentityRole>)scope.ServiceProvider.GetService(typeof(RoleManager<IdentityRole>))!;
 
     string[] roleNames = { "Admin" };
 
@@ -46,5 +49,3 @@ async Task CreateRoles(IServiceProvider serviceCollection)
         }
     }
 }
-
-app.Run();

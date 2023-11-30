@@ -8,11 +8,12 @@ namespace Recipe.Persistence;
 
 public class AppDbContext  : IdentityDbContext<AppUserEntity>
 {
-    private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly IHttpContextAccessor _httpContextAccessor = null!;
     
-    public DbSet<IngredientEntity> Ingredients { get; set; }
-    public DbSet<RecipeEntity> Recipes { get; set; }
-    public DbSet<RecipeLikeEntity> RecipeLikes { get; set; }
+    public DbSet<IngredientEntity> Ingredients { get; init; } = null!;
+    public DbSet<RecipeEntity> Recipes { get; init; } = null!;
+    public DbSet<RecipeLikeEntity> RecipeLikes { get; init; } = null!;
+
     public AppDbContext()
     {
             

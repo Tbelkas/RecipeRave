@@ -1,4 +1,5 @@
-﻿namespace Recipe.Api.Models.Requests.Base;
+﻿// ReSharper disable UnusedAutoPropertyAccessor.Global
+namespace Recipe.Api.Models.Requests.Base;
 
 public abstract class ChangeLikeStatus
 {

@@ -1,13 +1,12 @@
-﻿using System.Net;
-using AutoMapper;
+﻿using AutoMapper;
 using Recipe.Api.Automapper.Converters;
 using Recipe.Api.Automapper.Models;
 using Recipe.Api.Models.Responses.Base;
-using Recipe.Common.Models.Enums;
 using Recipe.Common.Models.Responses.Base;
 
 namespace Recipe.Api.Automapper;
 
+// ReSharper disable once UnusedType.Global
 public class ResponseProfile : Profile
 {
     public ResponseProfile()
@@ -16,7 +15,7 @@ public class ResponseProfile : Profile
         CreateMap(typeof(Response), typeof(ApiResponse));
         CreateMap(typeof(Response), typeof(ApiResponseTuple<>))
             .ForMember("Response", opt => opt.MapFrom(s => s))
-            .ForMember("StatusCode", opt => opt.ConvertUsing<StatusCode, HttpStatusCode>(new StatusCodeConverter(), "StatusCode"));
+            .ForMember("StatusCode", opt => opt.ConvertUsing(new StatusCodeConverter(), "StatusCode"));
         
         CreateMap<Response, ApiResponseTuple>()
             .ForMember(dest => dest.Response, opt => opt.MapFrom(s => s))
@@ -27,7 +26,7 @@ public class ResponseProfile : Profile
       
         CreateMap(typeof(Response<>), typeof(ApiResponseTuple<>))
             .ForMember("Response", opt => opt.MapFrom(s => s))
-            .ForMember("StatusCode", opt => opt.ConvertUsing<StatusCode, HttpStatusCode>(new StatusCodeConverter(), "StatusCode"));
+            .ForMember("StatusCode", opt => opt.ConvertUsing(new StatusCodeConverter(), "StatusCode"));
 
     }
 }

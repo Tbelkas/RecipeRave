@@ -1,11 +1,13 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿// ReSharper disable CollectionNeverUpdated.Global
+// ReSharper disable UnusedMember.Global 
+// ReSharper disable EntityFramework.ModelValidation.UnlimitedStringLength todo
+using Microsoft.AspNetCore.Identity;
+
 
 namespace Recipe.Persistence.Entities;
 
-// todo http context user
 public class AppUserEntity : IdentityUser
 {
-    public string? Name { get; set; }
-    
-    public List<RecipeEntity> LikedRecipes { get; set; }
+    public string? Name { get; init; }
+    public List<RecipeEntity>? LikedRecipes { get; init; }
 }

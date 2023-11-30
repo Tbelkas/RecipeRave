@@ -4,7 +4,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace Recipe.Persistence;
 
-// todo: remove?
+// ReSharper disable once UnusedType.Global
 public class DesignTimeDbContext : IDesignTimeDbContextFactory<AppDbContext>
 {
     public AppDbContext CreateDbContext(string[] args)

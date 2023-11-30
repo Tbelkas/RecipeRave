@@ -2,8 +2,8 @@
 
 public class LikesRecipeModel : RecipeModel
 {
-    public int LikeCount { get; set; }
-    public bool HasUserLiked { get; set; }
-    public string CreatedBy { get; set; }
-    public DateTime CreatedDate { get; set; }
+    public int LikeCount { get; init; }
+    public bool HasUserLiked { get; init; }
+    public string? CreatedBy { get; init; }
+    public DateTime CreatedDate { get; init; }
 }

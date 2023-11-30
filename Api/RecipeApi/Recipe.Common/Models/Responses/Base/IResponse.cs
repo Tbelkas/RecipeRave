@@ -1,10 +1,10 @@
-﻿using System.Net;
+﻿// ReSharper disable UnusedMemberInSuper.Global
 using Recipe.Common.Models.Enums;
 
 namespace Recipe.Common.Models.Responses.Base;
 
 public interface IResponse
 {
-    List<string> ErrorMessages { get; set; }
+    List<string>? ErrorMessages { get; set; }
     StatusCode StatusCode { get; set; }
 }

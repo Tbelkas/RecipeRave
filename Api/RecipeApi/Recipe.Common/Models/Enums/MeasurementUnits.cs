@@ -1,4 +1,5 @@
-﻿namespace Recipe.Common.Models.Enums;
+﻿// ReSharper disable UnusedMember.Global
+namespace Recipe.Common.Models.Enums;
 
 public enum MeasurementUnit
 {
